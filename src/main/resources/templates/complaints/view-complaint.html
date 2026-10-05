@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{complaints/layout :: head('Ticket Details - ' + complaint.ticketId)}"></head>
+<body>
+
+<nav th:replace="~{complaints/layout :: navbar('my')}"></nav>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <a th:href="@{/complaints/my}" class="btn btn-sm btn-outline-secondary">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Back to My Complaints
+                </a>
+                <div th:if="${complaint.editableByCustomer}">
+                    <a th:href="@{'/complaints/edit/' + ${complaint.ticketId}}" class="btn btn-sm btn-warning">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Edit Complaint
+                    </a>
+                </div>
+            </div>
+
+            <div class="card card-shadow mb-4">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted">Ticket ID:</span>
+                        <span class="font-monospace fw-bold fs-5 text-primary ms-1" th:text="${complaint.ticketId}"></span>
+                    </div>
+                    <div>
+                        <span th:class="${complaint.status.badgeClass} + ' me-1'" th:text="${complaint.status.displayName}"></span>
+                        <span th:class="${complaint.priority.badgeClass}" th:text="${complaint.priority.displayName}"></span>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3" th:text="${complaint.subject}"></h5>
+
+                    <div class="row mb-3 py-2 bg-light rounded border g-2">
+                        <div class="col-sm-6">
+                            <span class="text-muted small">Category:</span>
+                            <span class="fw-semibold d-block" th:text="${complaint.category.displayName}"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="text-muted small">Linked Booking:</span>
+                            <span class="fw-semibold d-block" th:text="${complaint.booking != null ? complaint.booking.bookingReference + ' (' + complaint.booking.route + ')' : 'None'}"></span>
+                        </div>
+                    </div>
+
+                    <h6 class="fw-bold text-muted small text-uppercase">Complaint Description</h6>
+                    <p class="text-secondary p-3 bg-light rounded border" style="white-space: pre-wrap;" th:text="${complaint.description}"></p>
+
+                    <!-- Staff Response Box -->
+                    <div th:if="${complaint.staffRemarks != null}" class="alert alert-success mt-4">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fa-solid fa-circle-check fs-4 me-2 text-success"></i>
+                            <h6 class="fw-bold mb-0">Official Resolution Response from Support Team</h6>
+                        </div>
+                        <p class="mb-2" style="white-space: pre-wrap;" th:text="${complaint.staffRemarks}"></p>
+                        <div class="text-muted small">
+                            <span th:if="${complaint.resolvedBy != null}">Handled by: <strong th:text="${complaint.resolvedBy.fullName}"></strong> | </span>
+                            <span th:if="${complaint.resolvedAt != null}">Resolved on: <span th:text="${#temporals.format(complaint.resolvedAt, 'dd MMM yyyy, HH:mm')}"></span></span>
+                        </div>
+                    </div>
+
+                    <div th:if="${complaint.staffRemarks == null}" class="alert alert-warning mt-4">
+                        <i class="fa-solid fa-clock-rotate-left me-2"></i>
+                        Our customer service team is currently investigating your ticket. Target SLA deadline:
+                        <strong th:text="${#temporals.format(complaint.slaDeadline, 'dd MMM yyyy, HH:mm')}"></strong>.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{complaints/layout :: footer}"></footer>
+</body>
+</html>
