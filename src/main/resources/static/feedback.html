@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Feedback | LankaRide</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+	<link rel="stylesheet" href="css/srilanka-travel.css" />
+</head>
+<body class="lk-travel lk-home-page feedback-page">
+	<div class="lr-topbar">
+		<div class="container-xl d-flex align-items-center justify-content-between gap-3">
+			<a href="feedback.html" class="lr-help-link">Need help booking?</a>
+			<div class="d-flex align-items-center gap-3">
+				<span>English</span>
+				<div class="lr-accessibility" aria-label="Font size controls">
+					<button type="button" aria-label="Decrease font size">A-</button>
+					<button type="button" aria-label="Default font size">A</button>
+					<button type="button" aria-label="Increase font size">A+</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<nav class="navbar navbar-expand-lg lr-navbar sticky-top" id="mainNavbar">
+		<div class="container-xl">
+			<a class="navbar-brand lr-brand" href="index.html" aria-label="LankaRide home">
+				<span class="lr-brand-mark"><i class="bi bi-bus-front"></i></span>
+				<span>LankaRide</span>
+			</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavMenu" aria-controls="mainNavMenu" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="mainNavMenu">
+				<ul class="navbar-nav mx-auto mb-2 mb-lg-0 lr-nav-links">
+					<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+					<li class="nav-item"><a class="nav-link" href="booking.html">Journeys</a></li>
+					<li class="nav-item"><a class="nav-link" href="profile.html">Tickets</a></li>
+					<li class="nav-item"><a class="nav-link active" href="feedback.html">Support</a></li>
+				</ul>
+				<div class="d-flex align-items-center gap-2 lr-auth-actions">
+					<a href="login.html" id="navLogin" class="btn btn-outline-success lr-login-btn">Log in</a>
+					<a href="register.html" id="navSignup" class="btn btn-success lr-signup-btn">Sign up</a>
+					<div class="notification-wrapper hidden" id="notificationWrapper">
+						<button id="notificationBell" class="btn lr-icon-btn notification-trigger" type="button" aria-label="Notifications" aria-expanded="false" aria-controls="notificationDropdown">
+							<i class="bi bi-bell"></i>
+							<span id="notificationBadge" class="notification-badge hidden">0</span>
+						</button>
+						<div id="notificationDropdown" class="notification-dropdown hidden" aria-live="polite">
+							<div class="notification-header">
+								<h3>Notifications</h3>
+								<button type="button" class="mark-all-read" id="markAllRead" disabled>Mark all as read</button>
+							</div>
+							<div class="notification-list" id="notificationList">
+								<div class="notification-empty">
+									<i class="bi bi-bell-slash"></i>
+									<strong>You're all caught up</strong>
+									<span>New booking and support updates will appear here.</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<a href="profile.html" id="navProfile" class="btn lr-icon-btn hidden" aria-label="Profile">
+						<i class="bi bi-person"></i>
+					</a>
+					<button id="navSignout" class="btn btn-outline-secondary hidden" type="button">Sign out</button>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+	<main class="feedback-main">
+		<div class="container-xl">
+			<section class="feedback-header">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="index.html">Home</a></li>
+						<li class="breadcrumb-item active" aria-current="page">Feedback</li>
+					</ol>
+				</nav>
+				<div class="feedback-title-row">
+					<div class="feedback-icon-box" aria-hidden="true">
+						<i class="bi bi-chat-square-text"></i>
+					</div>
+					<div>
+						<p class="lr-eyebrow">Passenger support</p>
+						<h1>Share Your Feedback</h1>
+						<p>Tell us about your LankaRide experience. Your feedback helps us improve bus services and make booking easier for everyone.</p>
+					</div>
+				</div>
+			</section>
+
+			<div id="messageContainer" class="feedback-message-area"></div>
+
+			<section class="feedback-card">
+				<div class="feedback-card-heading">
+					<h2>Tell us about your experience</h2>
+					<p>Fields marked with * are required.</p>
+				</div>
+
+				<form id="feedbackForm" class="feedback-form" novalidate>
+					<div class="feedback-field">
+						<label for="name">Name *</label>
+						<input id="name" name="name" class="form-control" type="text" required autocomplete="name" placeholder="Enter your full name" />
+						<p class="field-error" id="nameError" aria-live="polite"></p>
+					</div>
+
+					<div class="feedback-field">
+						<label for="type">Feedback type *</label>
+						<select id="type" name="type" class="form-select" required>
+							<option value="">Select feedback type</option>
+							<option value="feedback">General feedback</option>
+							<option value="feedback">Booking experience</option>
+							<option value="feedback">Bus service</option>
+							<option value="complain">Complaint</option>
+							<option value="feedback">Suggestion</option>
+							<option value="complain">Technical issue</option>
+						</select>
+						<p class="field-error" id="typeError" aria-live="polite"></p>
+					</div>
+
+					<div class="feedback-field">
+						<label for="description">Your feedback *</label>
+						<textarea id="description" name="description" class="form-control" required placeholder="Please describe your experience, issue or suggestion in detail."></textarea>
+						<p class="field-error" id="descriptionError" aria-live="polite"></p>
+					</div>
+
+					<div class="feedback-actions">
+						<button type="button" id="cancelBtn" class="btn feedback-secondary-btn">Cancel</button>
+						<button type="submit" id="submitFeedbackBtn" class="btn feedback-primary-btn">
+							<i class="bi bi-send"></i>
+							<span>Submit Feedback</span>
+						</button>
+					</div>
+				</form>
+			</section>
+
+			<section class="feedback-support">
+				<div class="feedback-support-icon" aria-hidden="true">
+					<i class="bi bi-headset"></i>
+				</div>
+				<div>
+					<h2>Need help with an existing booking?</h2>
+					<p>Use the Manage Booking page or contact the LankaRide support team.</p>
+				</div>
+				<div class="feedback-support-actions">
+					<a href="profile.html" class="btn feedback-secondary-btn">Manage Booking</a>
+					<a href="feedback.html" class="btn feedback-outline-btn">Contact Support</a>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<footer class="lr-footer">
+		<div class="container-xl">
+			<div class="row g-4">
+				<div class="col-md-6 col-lg-3">
+					<h2>LankaRide</h2>
+					<p>Online bus ticket booking for intercity journeys across Sri Lanka.</p>
+					<div class="lr-payment-methods lr-footer-payments">
+						<img src="assets/visa.svg" alt="Visa" class="lr-pay-logo">
+						<img src="assets/mastercard.svg" alt="Mastercard" class="lr-pay-logo">
+						<img src="assets/lankaqr.svg" alt="LankaQR" class="lr-pay-logo">
+					</div>
+				</div>
+				<div class="col-6 col-lg-2">
+					<h3>About</h3>
+					<a href="index.html">About LankaRide</a>
+					<a href="booking.html">Our network</a>
+					<a href="feedback.html">Careers</a>
+				</div>
+				<div class="col-6 col-lg-3">
+					<h3>Popular routes</h3>
+					<a href="booking.html">Colombo to Kandy</a>
+					<a href="booking.html">Colombo to Jaffna</a>
+					<a href="booking.html">Makumbura to Badulla</a>
+					<a href="booking.html">Colombo to Galle</a>
+				</div>
+				<div class="col-6 col-lg-2">
+					<h3>Support</h3>
+					<a href="feedback.html">Help centre</a>
+					<a href="profile.html">Manage booking</a>
+					<a href="profile.html">Refund policy</a>
+					<a href="feedback.html">Contact support</a>
+				</div>
+				<div class="col-6 col-lg-2">
+					<h3>Contact</h3>
+					<span>+94 11 234 5678</span>
+					<span>support@lankaride.lk</span>
+					<span>Colombo, Sri Lanka</span>
+				</div>
+			</div>
+			<div class="lr-footer-bottom">
+				<span id="footerYear"></span>
+				<div>
+					<a href="index.html">Privacy Policy</a>
+					<a href="index.html">Terms and Conditions</a>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		const API = 'http://localhost:8080/api/feedback';
+		let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+		let notificationDropdownVisible = false;
+
+		document.addEventListener('DOMContentLoaded', () => {
+			syncAuthUI();
+			setupEventListeners();
+			prefillName();
+			document.getElementById('footerYear').textContent = `© ${new Date().getFullYear()} LankaRide`;
+
+			if (currentUser && currentUser.role && currentUser.role.toLowerCase() === 'passenger') {
+				updateNotificationBadge();
+				setInterval(updateNotificationBadge, 30000);
+			}
+		});
+
+		function syncAuthUI() {
+			const loggedIn = !!currentUser;
+			const isPassenger = loggedIn && currentUser.role && currentUser.role.toLowerCase() === 'passenger';
+			document.getElementById('navLogin').classList.toggle('hidden', loggedIn);
+			document.getElementById('navSignup').classList.toggle('hidden', loggedIn);
+			document.getElementById('navProfile').classList.toggle('hidden', !loggedIn);
+			document.getElementById('navSignout').classList.toggle('hidden', !loggedIn);
+			document.getElementById('notificationWrapper').classList.toggle('hidden', !isPassenger);
+		}
+
+		function prefillName() {
+			if (!currentUser) return;
+			const fullName = `${currentUser.firstName || ''} ${currentUser.lastName || ''}`.trim();
+			if (fullName) document.getElementById('name').value = fullName;
+		}
+
+		function setupEventListeners() {
+			document.getElementById('feedbackForm').addEventListener('submit', async (event) => {
+				event.preventDefault();
+				await submitFeedback();
+			});
+
+			document.getElementById('cancelBtn').addEventListener('click', () => {
+				window.location.href = currentUser ? 'profile.html' : 'index.html';
+			});
+
+			document.getElementById('navSignout').addEventListener('click', () => {
+				localStorage.removeItem('currentUser');
+				currentUser = null;
+				syncAuthUI();
+				window.location.href = 'index.html';
+			});
+
+			document.getElementById('notificationBell').addEventListener('click', (event) => {
+				event.stopPropagation();
+				setNotificationDropdown(!notificationDropdownVisible);
+			});
+
+			document.getElementById('notificationDropdown').addEventListener('click', (event) => {
+				event.stopPropagation();
+			});
+
+			document.getElementById('markAllRead').addEventListener('click', () => {
+				if (!currentUser || !currentUser.nic) return;
+				fetch(`/api/notifications/user/${currentUser.nic}/read-all`, { method: 'PUT' })
+					.then(loadNotifications)
+					.catch(error => console.error('Error marking all as read:', error));
+			});
+
+			document.addEventListener('click', (event) => {
+				const wrapper = document.getElementById('notificationWrapper');
+				if (!wrapper.contains(event.target)) setNotificationDropdown(false);
+			});
+
+			document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape') setNotificationDropdown(false);
+			});
+
+			window.addEventListener('scroll', () => {
+				document.getElementById('mainNavbar').classList.toggle('is-scrolled', window.scrollY > 8);
+			});
+		}
+
+		function validateFeedbackForm(formData) {
+			const errors = {
+				name: !formData.name ? 'Name is required.' : '',
+				type: !formData.type ? 'Feedback type is required.' : '',
+				description: !formData.description ? 'Feedback details are required.' : ''
+			};
+
+			if (formData.description && formData.description.length < 10) {
+				errors.description = 'Please add at least 10 characters.';
+			}
+
+			document.getElementById('nameError').textContent = errors.name;
+			document.getElementById('typeError').textContent = errors.type;
+			document.getElementById('descriptionError').textContent = errors.description;
+			document.getElementById('name').classList.toggle('is-invalid', !!errors.name);
+			document.getElementById('type').classList.toggle('is-invalid', !!errors.type);
+			document.getElementById('description').classList.toggle('is-invalid', !!errors.description);
+
+			return !errors.name && !errors.type && !errors.description;
+		}
+
+		async function submitFeedback() {
+			const submitButton = document.getElementById('submitFeedbackBtn');
+			const submitText = submitButton.querySelector('span');
+			const formData = {
+				name: document.getElementById('name').value.trim(),
+				type: document.getElementById('type').value,
+				description: document.getElementById('description').value.trim(),
+			};
+
+			if (!validateFeedbackForm(formData)) {
+				showMessage('Please fix the highlighted fields.', 'error');
+				return;
+			}
+
+			try {
+				submitButton.disabled = true;
+				submitText.textContent = 'Submitting...';
+
+				const response = await fetch(API, {
+					method: 'POST',
+					credentials: 'same-origin',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(formData)
+				});
+
+				if (response.ok) {
+					showMessage('Thank you. Your feedback has been submitted successfully.', 'success');
+					document.getElementById('feedbackForm').reset();
+					prefillName();
+				} else {
+					const error = await response.text();
+					showMessage('Failed to submit feedback. Please try again.', 'error');
+					console.error('Error:', error);
+				}
+			} catch (error) {
+				console.error('Error submitting feedback:', error);
+				showMessage('Error submitting feedback. Please try again.', 'error');
+			} finally {
+				submitButton.disabled = false;
+				submitText.textContent = 'Submit Feedback';
+			}
+		}
+
+		function showMessage(message, type) {
+			const container = document.getElementById('messageContainer');
+			const messageDiv = document.createElement('div');
+			messageDiv.className = `feedback-alert ${type}`;
+			messageDiv.textContent = message;
+			container.innerHTML = '';
+			container.appendChild(messageDiv);
+			setTimeout(() => messageDiv.remove(), 5000);
+		}
+
+		function getTimeAgo(dateString) {
+			const now = new Date();
+			const past = new Date(dateString);
+			const seconds = Math.floor((now - past) / 1000);
+			if (seconds < 60) return 'Just now';
+			const minutes = Math.floor(seconds / 60);
+			if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+			const hours = Math.floor(minutes / 60);
+			if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+			const days = Math.floor(hours / 24);
+			return `${days} day${days > 1 ? 's' : ''} ago`;
+		}
+
+		function loadNotifications() {
+			if (!currentUser || !currentUser.nic) return;
+			fetch(`/api/notifications/user/${currentUser.nic}`)
+				.then(response => response.json())
+				.then(notifications => {
+					displayNotifications(notifications);
+					updateNotificationBadge();
+				})
+				.catch(error => console.error('Error loading notifications:', error));
+		}
+
+		function getNotificationEmptyState() {
+			return `
+				<div class="notification-empty">
+					<i class="bi bi-bell-slash"></i>
+					<strong>You're all caught up</strong>
+					<span>New booking and support updates will appear here.</span>
+				</div>
+			`;
+		}
+
+		function getNotificationTitle(notification) {
+			const message = (notification.message || '').toLowerCase();
+			if (message.includes('booking') || message.includes('reservation')) return 'Booking update';
+			if (message.includes('payment')) return 'Payment update';
+			if (message.includes('feedback') || message.includes('support')) return 'Support update';
+			return 'LankaRide update';
+		}
+
+		function displayNotifications(notifications) {
+			const list = document.getElementById('notificationList');
+			const markAllButton = document.getElementById('markAllRead');
+			const items = Array.isArray(notifications) ? notifications : [];
+			markAllButton.disabled = !items.some(notification => !notification.isRead);
+			if (items.length === 0) {
+				list.innerHTML = getNotificationEmptyState();
+				return;
+			}
+
+			list.innerHTML = items.map(notification => `
+				<button class="notification-item ${!notification.isRead ? 'unread' : ''}" data-id="${notification.id}" type="button">
+					<span class="notification-type-icon"><i class="bi bi-bell"></i></span>
+					<span class="notification-content">
+						<span class="notification-title">${getNotificationTitle(notification)}</span>
+						<span class="notification-message">${notification.message || 'You have a new LankaRide update.'}</span>
+						<span class="notification-time">${getTimeAgo(notification.createdAt)}</span>
+					</span>
+					${!notification.isRead ? '<span class="notification-dot" aria-hidden="true"></span>' : '<span></span>'}
+				</button>
+			`).join('');
+
+			list.querySelectorAll('.notification-item').forEach(item => {
+				item.addEventListener('click', () => markNotificationAsRead(item.dataset.id));
+			});
+		}
+
+		function updateNotificationBadge() {
+			if (!currentUser || !currentUser.nic) return;
+			fetch(`/api/notifications/user/${currentUser.nic}/count`)
+				.then(response => response.json())
+				.then(data => {
+					const badge = document.getElementById('notificationBadge');
+					if (data.unreadCount > 0) {
+						badge.textContent = data.unreadCount > 99 ? '99+' : data.unreadCount;
+						badge.classList.remove('hidden');
+					} else {
+						badge.classList.add('hidden');
+					}
+				})
+				.catch(error => console.error('Error updating notification badge:', error));
+		}
+
+		function markNotificationAsRead(notificationId) {
+			fetch(`/api/notifications/${notificationId}/read`, { method: 'PUT' })
+				.then(loadNotifications)
+				.catch(error => console.error('Error marking notification as read:', error));
+		}
+
+		function setNotificationDropdown(open) {
+			const dropdown = document.getElementById('notificationDropdown');
+			const bell = document.getElementById('notificationBell');
+			notificationDropdownVisible = open;
+			dropdown.classList.toggle('is-open', open);
+			dropdown.classList.toggle('hidden', !open);
+			bell.setAttribute('aria-expanded', String(open));
+			if (open) loadNotifications();
+		}
+	</script>
+</body>
+</html>
