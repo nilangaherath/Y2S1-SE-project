@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{complaints/layout :: head(${ticketId != null ? 'Edit Ticket ' + ticketId : 'Submit Complaint'})}"></head>
+<body>
+
+<nav th:replace="~{complaints/layout :: navbar('create')}"></nav>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card card-shadow">
+                <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-primary fw-bold">
+                        <i class="fa-solid" th:classappend="${ticketId != null ? 'fa-pen-to-square' : 'fa-clipboard-question'}"></i>
+                        <span th:text="${ticketId != null ? 'Edit Ticket (' + ticketId + ')' : 'Submit Customer Complaint / Feedback'}"></span>
+                    </h5>
+                    <a th:href="@{/complaints/my}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Back to My Tickets
+                    </a>
+                </div>
+                <div class="card-body p-4">
+
+                    <!-- Global Error Alert -->
+                    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="fa-solid fa-circle-exclamation me-2"></i>
+                        <span th:text="${errorMessage}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <form th:action="${ticketId != null ? '/complaints/edit/' + ticketId : '/complaints/new'}" 
+                          th:object="${complaintDTO}" method="post" novalidate>
+                        
+                        <input type="hidden" th:field="*{id}" />
+
+                        <!-- Complaint Category -->
+                        <div class="mb-3">
+                            <label for="category" class="form-label fw-semibold">
+                                Complaint Category <span class="text-danger">*</span>
+                            </label>
+                            <select id="category" th:field="*{category}" class="form-select" 
+                                    th:classappend="${#fields.hasErrors('category') ? 'is-invalid' : ''}" 
+                                    onchange="updateSlaHint(this.value)">
+                                <option value="" selected>-- Select Category --</option>
+                                <option th:each="cat : ${categories}" 
+                                        th:value="${cat}" 
+                                        th:text="${cat.displayName}">
+                                </option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                            <small class="text-muted">Dynamic priority and SLA deadline are calculated via the Strategy Pattern based on category.</small>
+                        </div>
+
+                        <!-- SLA Hint Info Banner -->
+                        <div id="slaHintBox" class="alert alert-info py-2 px-3 mb-3 d-flex align-items-center" style="font-size: 0.9rem;">
+                            <i class="fa-solid fa-stopwatch me-2 text-info fs-5"></i>
+                            <div>
+                                <span class="fw-bold" id="slaHintTitle">Automated SLA Guarantee:</span>
+                                <span id="slaHintText">Select a category to view response turnaround time.</span>
+                            </div>
+                        </div>
+
+                        <!-- Booking Reference (Optional) -->
+                        <div class="mb-3">
+                            <label for="bookingReference" class="form-label fw-semibold">
+                                Linked Booking Reference <small class="text-muted fw-normal">(Optional)</small>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-receipt text-muted"></i></span>
+                                <input type="text" id="bookingReference" th:field="*{bookingReference}" 
+                                       class="form-control" placeholder="e.g., BKG-2026-1001"
+                                       th:classappend="${#fields.hasErrors('bookingReference') ? 'is-invalid' : ''}" list="userBookingsList">
+                            </div>
+                            <datalist id="userBookingsList" th:if="${userBookings != null}">
+                                <option th:each="b : ${userBookings}" th:value="${b.bookingReference}" 
+                                        th:text="${b.bookingReference + ' - ' + b.route + ' (' + b.seatNumbers + ')'}">
+                                </option>
+                            </datalist>
+                            <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('bookingReference')}" th:errors="*{bookingReference}"></div>
+                            <small class="text-muted">Link a ticket reference if your issue is related to an existing bus journey.</small>
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="mb-3">
+                            <label for="subject" class="form-label fw-semibold">
+                                Subject / Summary <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" id="subject" th:field="*{subject}" class="form-control" 
+                                   placeholder="Briefly state your concern (5 to 150 characters)"
+                                   th:classappend="${#fields.hasErrors('subject') ? 'is-invalid' : ''}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label fw-semibold">
+                                Detailed Description <span class="text-danger">*</span>
+                            </label>
+                            <textarea id="description" th:field="*{description}" class="form-control" rows="5"
+                                      placeholder="Provide all relevant details (minimum 15 characters)..."
+                                      th:classappend="${#fields.hasErrors('description') ? 'is-invalid' : ''}"></textarea>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end gap-2">
+                            <a th:href="@{/complaints/my}" class="btn btn-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="fa-solid fa-paper-plane me-1"></i>
+                                <span th:text="${ticketId != null ? 'Update Complaint' : 'Submit Ticket'}"></span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{complaints/layout :: footer}"></footer>
+
+<script>
+    const hints = {
+        'PAYMENT_ISSUE': { title: 'Payment & Refund (URGENT):', text: 'Guaranteed 6-hour SLA turnaround with immediate financial verification.' },
+        'BUS_DELAY': { title: 'Bus Delay (HIGH):', text: '12-hour resolution window with transit supervisor verification.' },
+        'STAFF_BEHAVIOR': { title: 'Staff Misconduct (HIGH):', text: '18-hour investigation with depot and crew manager.' },
+        'BUS_CONDITION': { title: 'Bus Condition & Amenities (MEDIUM):', text: '24-hour maintenance team review and resolution.' },
+        'GENERAL_FEEDBACK': { title: 'General Inquiries (LOW):', text: '48-hour SLA for administrative response.' }
+    };
+
+    function updateSlaHint(val) {
+        const titleEl = document.getElementById('slaHintTitle');
+        const textEl = document.getElementById('slaHintText');
+        if (val && hints[val]) {
+            titleEl.innerText = hints[val].title;
+            textEl.innerText = hints[val].text;
+        } else {
+            titleEl.innerText = 'Automated SLA Guarantee:';
+            textEl.innerText = 'Select a category to view response turnaround time.';
+        }
+    }
+    
+    // Auto-trigger on page load if editing
+    document.addEventListener('DOMContentLoaded', () => {
+        const cat = document.getElementById('category').value;
+        if (cat) updateSlaHint(cat);
+    });
+</script>
+</body>
+</html>
